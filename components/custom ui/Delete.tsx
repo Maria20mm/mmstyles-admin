@@ -33,13 +33,16 @@ const Delete: React.FC<DeleteProps> = ({ item, id }) => {
         method: "DELETE",
       })
       if (!res.ok) {
-        throw new Error(await res.text())
+        const message = await res.text();
+        throw new Error(message || `Failed to delete ${item}.`);
       }
       toast.success(`${item} deleted`)
       window.location.href = (`/${itemType}`)
     } catch (err) {
       console.log(err)
-      toast.error("Something went wrong! Please try again.")
+      const errorMessage =
+        err instanceof Error ? err.message : `Failed to delete ${item}.`;
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
