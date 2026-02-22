@@ -161,6 +161,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
         : "/api/products";
       const res = await fetch(url, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(values),
       });
       if (!res.ok) {
@@ -171,7 +174,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
       router.refresh();
     } catch (err) {
       console.log("[products_POST]", err);
-      toast.error("Something went wrong! Please try again.");
+      const errorMessage =
+        err instanceof Error ? err.message : "Something went wrong! Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

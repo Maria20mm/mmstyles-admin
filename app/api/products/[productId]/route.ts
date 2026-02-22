@@ -85,8 +85,9 @@ export const POST = async (
 
     const { userId } =auth();
     const demoMode = process.env.DEMO_MODE === "true";
+    const skipAuth = process.env.SKIP_AUTH === "true";
 
-    if (!userId && !demoMode) {
+    if (!userId && !demoMode && !skipAuth) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -212,7 +213,8 @@ export const POST = async (
         ),
       });
     }
-    return new NextResponse("Internal error", { status: 500 });
+    const message = err instanceof Error ? err.message : "Internal error";
+    return new NextResponse(message, { status: 500 });
   }
 };
 
@@ -223,8 +225,9 @@ export const DELETE = async (
   try {
     const { userId } = auth();
     const demoMode = process.env.DEMO_MODE === "true";
+    const skipAuth = process.env.SKIP_AUTH === "true";
 
-    if (!userId && !demoMode) {
+    if (!userId && !demoMode && !skipAuth) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -273,7 +276,8 @@ export const DELETE = async (
         status: 200,
       });
     }
-    return new NextResponse("Internal error", { status: 500 });
+    const message = err instanceof Error ? err.message : "Internal error";
+    return new NextResponse(message, { status: 500 });
   }
 };
 

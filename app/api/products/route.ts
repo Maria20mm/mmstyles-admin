@@ -35,8 +35,9 @@ export const POST = async (req: NextRequest) => {
 
     const { userId } = auth();
     const demoMode = process.env.DEMO_MODE === "true";
+    const skipAuth = process.env.SKIP_AUTH === "true";
 
-    if (!userId && !demoMode) {
+    if (!userId && !demoMode && !skipAuth) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -114,7 +115,8 @@ export const POST = async (req: NextRequest) => {
 
       return NextResponse.json(productWithCollections, { status: 200 });
     }
-    return new NextResponse("Internal Error", { status: 500 });
+    const message = err instanceof Error ? err.message : "Internal Error";
+    return new NextResponse(message, { status: 500 });
   }
 };
 

@@ -62,6 +62,9 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
         : "/api/collections";
       const res = await fetch(url, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(values),
       });
       if (!res.ok) {
